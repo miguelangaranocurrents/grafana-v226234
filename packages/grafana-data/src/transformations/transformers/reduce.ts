@@ -158,6 +158,11 @@ function reduceSeriesToRows(
         const t = guessFieldTypeForField(f);
         if (t) {
           f.type = t;
+          if (t === FieldType.number) {
+            // Rows reduced from different columns may mix numbers with numeric-looking strings;
+            // a number field must only contain numbers
+            f.values = f.values.map((v) => (typeof v === 'string' ? Number(v) : v));
+          }
         }
       }
     }
